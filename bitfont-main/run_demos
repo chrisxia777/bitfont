@@ -1,0 +1,133 @@
+#!/bin/bash
+
+if [ "$#" == "0" ]; then
+    # Do all demos if no arguments specified
+    val="1"
+else
+    val="0"
+fi
+
+do_c=$val
+do_cpp=$val
+do_csharp=$val
+do_go=$val
+do_java=$val
+do_javascript=$val
+do_json=$val
+do_python=$val
+do_ruby=$val
+do_rust=$val
+
+for arg in "$@"; do
+    shift
+    case $arg in 
+        --c)
+        do_c="1"
+        ;;
+        --cpp)
+        do_cpp="1"
+        ;;
+        --cs|--csharp)
+        do_csharp="1"
+        ;;
+        --go)
+        do_go="1"
+        ;;
+        --java)
+        do_java="1"
+        ;;
+        --js|--javascript)
+        do_javascript="1"
+        ;;
+        --json)
+        do_json="1"
+        ;;
+        --py|--python)
+        do_python="1"
+        ;;
+        --ruby)
+        do_ruby="1"
+        ;;
+        --rust)
+        do_rust="1"
+        ;;
+    esac
+done
+
+cd "$(dirname "$0")" || exit
+
+if [ $do_c == "1" ]; then
+    echo "C"
+    pushd c || exit
+    # Or gcc or whatever
+    clang -o bitfontdata bitfontdata.c
+    ./bitfontdata
+    popd || exit
+fi
+
+if [ $do_cpp == "1" ]; then
+    echo "C++"
+    pushd cpp || exit
+    # Or g++ or whatever
+    clang++ -std=c++11 -o bitfontdata bitfontdata.cpp
+    ./bitfontdata
+    popd || exit
+fi
+
+if [ $do_csharp == "1" ]; then
+    echo "C#"
+    pushd csharp || exit
+    dotnet run
+    popd || exit
+fi
+
+if [ $do_go == "1" ]; then
+    echo "Go"
+    pushd go || exit
+    go run bitfontdata.go
+    popd || exit
+fi
+
+if [ $do_java == "1" ]; then
+    echo "Java"
+    pushd java || exit
+    mvn install
+    mvn compile
+    mvn exec:java
+    popd || exit
+fi
+
+if [ $do_javascript == "1" ]; then
+    echo "JavaScript"
+    pushd javascript || exit
+    ./bitfontdata.js
+    popd || exit
+fi
+
+if [ $do_json == "1" ]; then
+    echo "JSON"
+    pushd json || exit
+    jq < bitfontdata.json '.Libertinus_Serif_18.chars["&"]'
+    popd || exit
+fi
+
+if [ $do_python == "1" ]; then
+    echo "Python"
+    pushd python || exit
+    ./bitfontdata.py
+    popd || exit
+fi
+
+if [ $do_ruby == "1" ]; then
+    echo "Ruby"
+    pushd ruby || exit
+    ./bitfontdata.rb
+    popd || exit
+fi
+
+if [ $do_rust == "1" ]; then
+    echo "Rust"
+    pushd rust || exit
+    cargo run
+    popd || exit
+fi
